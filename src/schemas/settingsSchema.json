@@ -1,9 +1,0 @@
-{
-    "type": "object",
-    "properties": {
-      "enabled": { "type": "boolean" },
-      "threshold": { "type": "number", "minimum": 0, "maximum": 100 }
-    },
-    "required": ["enabled", "threshold"]
-  }
-  
