@@ -1,0 +1,46 @@
+{
+    "schedule": {
+        "days": "workday",
+        "times": [
+            "08:00",
+            "12:00",
+            "18:30"
+        ]
+    },
+    "repositories": [
+        {
+            "repoUrl": "https://github.com/user/repo1.git",
+            "localPath": "./temp-repo1",
+            "branch": "main",
+            "targetFolders": [
+                {
+                    "path": "config",
+                    "schema": "schemas/configSchema.json",
+                    "key_label": "version",
+                    "key_value": "1.0.0"
+                },
+                {
+                    "path": "settings",
+                    "schema": "schemas/settingsSchema.json",
+                    "key_label": "enabled",
+                    "key_value": true
+                }
+            ]
+        }
+    ],
+    "yamlKeyToMonitor": "version",
+    "email": {
+        "sender": "noreply@example.com",
+        "recipients": [
+            "recipient1@example.com"
+        ],
+        "smtp": {
+            "host": "smtp.example.com",
+            "port": 587,
+            "auth": {
+                "user": "user@example.com",
+                "pass": "yourpassword"
+            }
+        }
+    }
+}
