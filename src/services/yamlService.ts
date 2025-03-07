@@ -26,7 +26,8 @@ export class YamlService {
       for (const folderConfig of repo.targetFolders) {
         const folderPath = path.join(repo.localPath, folderConfig.path);
         const schemaPath = path.join(__dirname, "../", folderConfig.schema);
-        const keyLabel = folderConfig.key_label;
+        const keyLabelKey = folderConfig.key_label;
+        const keyValueKey = folderConfig.key_value;
 
         if (!fs.existsSync(folderPath) || !fs.existsSync(schemaPath)) {
           console.warn(`⚠️ Skipping folder: ${folderPath} (Schema not found: ${schemaPath})`);
@@ -50,28 +51,35 @@ export class YamlService {
             continue;
           }
 
-          const keyValue = yamlContent[keyLabel];
-          if (!keyValue) {
-            console.warn(`⚠️ Missing key '${keyLabel}' in ${filePath}, skipping.`);
+          const keyLabel = yamlContent[keyLabelKey];
+          const keyValue = yamlContent[keyValueKey];
+
+          if (!keyLabel || typeof keyLabel !== "string") {
+            console.warn(`⚠️ Missing or invalid key_label '${keyLabelKey}' in ${filePath}, skipping.`);
+            continue;
+          }
+
+          if (keyValue === undefined) {
+            console.warn(`⚠️ Missing key_value '${keyValueKey}' in ${filePath}, skipping.`);
             continue;
           }
 
           if (!catalog[repo.repoUrl][folderConfig.path][file]) {
-            // 📌 Új YAML fájl jelentése
-            changedFiles.push(`🆕 New entry: ${filePath} (${keyLabel}=${keyValue})`);
+            // 📌 New YAML file detected
+            changedFiles.push(`🆕 New entry: ${keyLabel} (${keyValueKey}=${keyValue})`);
           } else {
-            const oldValue = catalog[repo.repoUrl][folderConfig.path][file];
+            const oldValue = catalog[repo.repoUrl][folderConfig.path][file].value;
             if (oldValue !== keyValue) {
-              // 📌 Érték változás jelentése
-              changedFiles.push(`🔄 Updated: ${filePath} (${keyLabel} changed from ${oldValue} → ${keyValue})`);
+              // 📌 Value changed
+              changedFiles.push(`🔄 Updated: ${keyLabel} (${keyValueKey} changed from ${oldValue} → ${keyValue})`);
             } else {
-              // 📌 Ha nincs változás, ugorjunk
+              // 📌 No change, skip
               continue;
             }
           }
 
-          // 📌 Katalógus frissítése
-          catalog[repo.repoUrl][folderConfig.path][file] = keyValue;
+          // 📌 Update catalog
+          catalog[repo.repoUrl][folderConfig.path][file] = { label: keyLabel, value: keyValue };
         }
       }
     }
