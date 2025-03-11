@@ -26,13 +26,13 @@ export class YamlService {
             }
 
             for (const folderConfig of repo.targetFolders) {
-                const folderPath = path.join(process.cwd(),repo.localPath, folderConfig.path);
+                const folderPath = path.join(process.cwd(), repo.localPath, folderConfig.path);
                 const schemaPath = path.join(__dirname, "../schemas", folderConfig.schema);
                 const labelKey = folderConfig.label_key;
                 const valueKey = folderConfig.value_key;
 
                 if (!fs.existsSync(folderPath) || !fs.existsSync(schemaPath)) {
-                    console.warn(`⚠️ Skipping folder: ${folderPath} (Schema not found: ${schemaPath})`);
+                    console.warn(`Skipping folder: ${folderPath} (Schema not found: ${schemaPath})`);
                     continue;
                 }
 
@@ -49,40 +49,36 @@ export class YamlService {
                     const yamlContent = this.loadYaml(filePath);
 
                     if (!yamlContent || !validate(yamlContent)) {
-                        console.warn(`❌ Invalid YAML file skipped: ${filePath}`);
+                        console.warn(`Invalid YAML file skipped: ${filePath}`);
                         continue;
                     }
 
-                    const label = this.getNestedValue(yamlContent,labelKey);
-                    const value = this.getNestedValue(yamlContent,valueKey);
+                    const label = this.getNestedValue(yamlContent, labelKey);
+                    const value = this.getNestedValue(yamlContent, valueKey);
 
                     if (!label || typeof label !== "string") {
-                        console.warn(`⚠️ Missing or invalid label '${labelKey}' in ${filePath}, skipping.`);
+                        console.warn(`Missing or invalid label '${labelKey}' in ${filePath}, skipping.`);
                         continue;
                     }
 
                     if (value === undefined) {
-                        console.warn(`⚠️ Missing key_value '${valueKey}' in ${filePath}, skipping.`);
+                        console.warn(`Missing key_value '${valueKey}' in ${filePath}, skipping.`);
                         continue;
                     }
 
                     if (!catalog[repo.repoUrl][folderConfig.path][file]) {
-                        // 📌 New YAML file detected
-                        changedFiles.push(`🆕 New entry: ${file} ${label} (${valueKey}=${value})`);
+                        changedFiles.push(`New entry: ${file} ${label} (${valueKey}=${value})`);
                     } else {
                         const oldValue = catalog[repo.repoUrl][folderConfig.path][file].value;
                         if (oldValue !== value) {
-                            // 📌 Value changed
                             changedFiles.push(
-                                `🔄 Updated: ${file} ${label} (${valueKey} changed from ${oldValue} to ${value})`
+                                `Updated: ${file} ${label} (${valueKey} changed from ${oldValue} to ${value})`
                             );
                         } else {
-                            // 📌 No change, skip
                             continue;
                         }
                     }
 
-                    // 📌 Update catalog
                     catalog[repo.repoUrl][folderConfig.path][file] = { label: label, value: value };
                 }
             }
@@ -98,7 +94,7 @@ export class YamlService {
             const parsedYaml = yaml.load(fileContents);
             return typeof parsedYaml === "object" && parsedYaml !== null ? (parsedYaml as Record<string, any>) : null;
         } catch (error) {
-            console.error(`❌ Error loading YAML file: ${filePath}`, error);
+            console.error(`Error loading YAML file: ${filePath}`, error);
             return null;
         }
     }

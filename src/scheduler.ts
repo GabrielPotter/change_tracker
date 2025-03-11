@@ -14,7 +14,6 @@ const daysMap: Record<string, number> = {
 
 export let scheduledJobs: schedule.Job[] = [];
 
-// 📌 Determines if today is a valid execution day
 function shouldRunToday(): boolean {
     const today = new Date().getDay();
 
@@ -29,39 +28,34 @@ function shouldRunToday(): boolean {
     return false;
 }
 
-// 📌 Schedules all jobs for the current day
 function scheduleTasks() {
     if (!shouldRunToday()) {
-        console.log("⏳ Today is not a scheduled day. Skipping execution.");
+        console.log("Today is not a scheduled day. Skipping execution.");
         return;
     }
-
     // Clear previous jobs
     scheduledJobs.forEach((job) => job.cancel());
     scheduledJobs = [];
-
     for (const time of config.schedule.times) {
         const [hour, minute] = time.split(":").map(Number);
 
         const job = schedule.scheduleJob({ hour, minute }, () => {
-            console.log(`🚀 Running scheduled task at ${time}`);
+            console.log(`Running scheduled task at ${time}`);
             main().catch(console.error);
         });
 
         scheduledJobs.push(job);
-        console.log(`📅 Scheduled task for ${time}`);
+        console.log(`Scheduled task for ${time}`);
     }
 }
 
-// 📌 Recheck schedule every midnight
 function setupDailyReset() {
     schedule.scheduleJob({ hour: 0, minute: 0 }, () => {
-        console.log("🔄 Midnight reset: Updating schedule for the next day.");
+        console.log("Midnight reset: Updating schedule for the next day.");
         scheduleTasks();
     });
 }
 
-// 📌 Start Scheduler
 export function startScheduler() {
     scheduleTasks();
     setupDailyReset();

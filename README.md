@@ -213,16 +213,3 @@ rm catalog.json
   ```sh
   telnet smtp.example.com 587
   ```
-
----
-
-## 🎯 Summary
-✅ **Clones & tracks multiple Git repositories**  
-✅ **Validates YAML files against JSON Schemas**  
-✅ **Tracks new & changed key-value pairs in YAML**  
-✅ **Uses `catalog.json` to store YAML states**  
-✅ **Emails reports to multiple recipients**  
-✅ **REST API for real-time configuration updates**  
-✅ **Supports scheduled execution (everyday, weekdays, custom days & times)**  
-
-🚀 **You're now ready to monitor YAML changes effortlessly!** 🚀

@@ -26,22 +26,22 @@ const mode = getArgValue("--mode") || "scheduler"; // Default to "scheduler" if 
 
 switch (mode) {
     case "scheduler":
-        console.log("🚀 Starting in SCHEDULER mode...");
+        console.log("Starting in SCHEDULER mode...");
         startScheduler(); // Starts the service with scheduling
         break;
 
     case "manual":
-        console.log("🚀 Running MANUAL YAML processing...");
+        console.log("Running MANUAL YAML processing...");
         main().catch(console.error); // Runs the YAML processor once
         break;
 
     case "api":
-        console.log("🚀 API Mode: Only REST API is running...");
+        console.log("API Mode: Only REST API is running...");
         // No extra action needed, server.ts is already imported
         break;
 
     default:
-        console.log("⚠️ Unknown mode. Running default mode (Scheduler)...");
+        console.log("Unknown mode. Running default mode (Scheduler)...");
         startScheduler(); // Default mode
         break;
 }

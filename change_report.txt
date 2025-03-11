@@ -1,3 +1,0 @@
-🆕 New entry: a1.yaml my-normal-repo/repo1 (application.image.tag=1.0.2-l2)
-🆕 New entry: a2.yaml my-normal-repo/repo2 (application.image.tag=1.0.4-l2)
-🆕 New entry: a3.yaml my-normal-repo/repo3 (application.image.tag=1.0.3-l3)
