@@ -63,6 +63,15 @@ app.get("/next-run", (req: Request, res: Response): void => {
     res.json({ next_runs: nextRuns.map((run) => run.time) });
 });
 
+// Serve React frontend from dist/client
+const clientPath = path.join(__dirname, 'client');
+app.use(express.static(clientPath));
+
+// Fallback to index.html for React SPA
+app.get('*', (_, res) => {
+  res.sendFile(path.join(clientPath, 'index.html'));
+});
+
 const PORT = 3000;
 app.listen(PORT, () => {
     console.log(`🚀 REST API is running on http://localhost:${PORT}`);
